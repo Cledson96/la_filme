@@ -1,9 +1,13 @@
 import {QueryResult} from "pg"
 import { connection } from "../database/db.js";
-import { Genre,GenreEntity,Platform,PlatformEntity} from "../protocols/films.js";
+import { Genre,GenreEntity,Platform,PlatformEntity,Films,FilmsEntity} from "../protocols/films.js";
 
 export async function findGenre(body: Genre): Promise<QueryResult<GenreEntity>>{
     return connection.query("SELECT * FROM genre WHERE name=$1;",[body.name])
+}
+
+export async function findGenreID(body: Films): Promise<QueryResult<GenreEntity>>{
+    return connection.query("SELECT * FROM genre WHERE id=$1;",[body.genre_id])
 }
 
 export async function insertGenre(body: Genre): Promise<QueryResult<GenreEntity>>{
@@ -13,7 +17,19 @@ export async function insertGenre(body: Genre): Promise<QueryResult<GenreEntity>
 export async function findPlatform(body: Platform): Promise<QueryResult<PlatformEntity>>{
     return connection.query("SELECT * FROM platform WHERE name=$1;",[body.name])
 }
+export async function findPlatformID(body: Films): Promise<QueryResult<PlatformEntity>>{
+    return connection.query("SELECT * FROM platform WHERE id=$1;",[body.platform_id])
+}
 
 export async function insertPlatform(body: Platform): Promise<QueryResult<PlatformEntity>>{
     return connection.query("INSERT INTO platform (name) VALUES ($1);",[body.name])
 }
+
+export async function findFilm(body: Films): Promise<QueryResult<FilmsEntity>>{
+    return connection.query("SELECT * FROM films WHERE name=$1;",[body.name])
+}
+
+export async function insertFilms(body: Films): Promise<QueryResult<FilmsEntity>>{
+    return connection.query("INSERT INTO films (name,genre_id,platform_id,note,status) VALUES ($1,$2,$3,$4,$5);",[body.name,body.genre_id,body.platform_id,body.note,body.status])
+}
+
