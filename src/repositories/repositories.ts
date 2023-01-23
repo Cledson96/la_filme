@@ -28,8 +28,23 @@ export async function insertPlatform(body: Platform): Promise<QueryResult<Platfo
 export async function findFilm(body: Films): Promise<QueryResult<FilmsEntity>>{
     return connection.query("SELECT * FROM films WHERE name=$1;",[body.name])
 }
+export async function findFilmID(body: FilmsEntity): Promise<QueryResult<FilmsEntity>>{
+    return connection.query("SELECT * FROM films WHERE id=$1;",[body.id])
+}
 
 export async function insertFilms(body: Films): Promise<QueryResult<FilmsEntity>>{
     return connection.query("INSERT INTO films (name,genre_id,platform_id,note,status) VALUES ($1,$2,$3,$4,$5);",[body.name,body.genre_id,body.platform_id,body.note,body.status])
+}
+
+export async function updateFilms(body: FilmsEntity): Promise<QueryResult<FilmsEntity>>{
+    return connection.query("UPDATE  films SET status ='assistido' WHERE id=$1;",[body.id])
+}
+
+export async function deleteFilms(body: FilmsEntity): Promise<QueryResult<FilmsEntity>>{
+    return connection.query("DELETE FROM films  WHERE id=$1;",[body.id])
+}
+
+export async function films_genre(): Promise<QueryResult<FilmsEntity>>{
+    return connection.query("SELECT genre.name ,count(films.*) FROM genre JOIN films ON films.genre_id = genre.id WHERE id=$1;")
 }
 
